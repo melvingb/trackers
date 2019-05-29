@@ -109,7 +109,8 @@ class functions_tracker
 	{
 		$sql = 'SELECT *
 			FROM ' . $this->table_prefix . tables::TRACKERS_PROJECT . '
-			WHERE tracker_id = ' . (int) $tracker_id;
+			WHERE tracker_id = ' . (int) $tracker_id . '
+				AND project_active = ' . 1;
 		$result = $this->db->sql_query($sql);
 		$projects = array();
 		while ($row = $this->db->sql_fetchrow($result))

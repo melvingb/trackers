@@ -103,6 +103,7 @@ class m1_initial_schema extends \phpbb\db\migration\migration
 						'project_description'		=> array('VCHAR:255', ''),
 						'project_note'				=> array('MTEXT_UNI', ''),
 						'project_private'			=> array('BOOL', 0),
+						'project_active'			=> array('BOOL', 0),
 					),
 					'PRIMARY_KEY'	=> 'project_id',
 				),
