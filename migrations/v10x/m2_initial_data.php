@@ -51,6 +51,21 @@ class m2_initial_data extends \phpbb\db\migration\container_aware_migration
 
 			// Call a custom callable function to perform data insertion
 			array('custom', array(array($this, 'insert_data'))),
+
+			// Add modules
+			array('module.add', array(
+				'acp',
+				'ACP_CAT_DOT_MODS',
+				'TRACKERS'
+			)),
+			array('module.add', array(
+				'acp',
+				'TRACKERS',
+				array(
+					'module_basename'	=> '\kinerity\trackers\acp\trackers_module',
+					'modes'				=> array('manage'),
+				),
+			)),
 		);
 
 		if ($this->role_exists('ROLE_USER_STANDARD'))
@@ -765,32 +780,44 @@ class m2_initial_data extends \phpbb\db\migration\container_aware_migration
 		$tracker_data = array(
 			array(
 				'tracker_id'			=> 1,
+				'left_id'				=> 1,
+				'right_id'				=> 2,
 				'tracker_name'			=> 'Incident tracker',
 				'tracker_email'			=> 'incidents' . $domain,
+				'tracker_active'		=> 1,
 				'allow_view_all'		=> 0,
 				'allow_closed_reply'	=> 1,
 			),
 
 			array(
 				'tracker_id'			=> 2,
+				'left_id'				=> 3,
+				'right_id'				=> 4,
 				'tracker_name'			=> 'Security tracker',
 				'tracker_email'			=> 'security' . $domain,
+				'tracker_active'		=> 1,
 				'allow_view_all'		=> 0,
 				'allow_closed_reply'	=> 1,
 			),
 
 			array(
 				'tracker_id'			=> 3,
+				'left_id'				=> 5,
+				'right_id'				=> 6,
 				'tracker_name'			=> 'Bug tracker',
 				'tracker_email'			=> 'bugs' . $domain,
+				'tracker_active'		=> 1,
 				'allow_view_all'		=> 1,
 				'allow_closed_reply'	=> 1,
 			),
 
 			array(
 				'tracker_id'			=> 4,
+				'left_id'				=> 7,
+				'right_id'				=> 8,
 				'tracker_name'			=> 'Feature tracker',
 				'tracker_email'			=> 'features' . $domain,
+				'tracker_active'		=> 1,
 				'allow_view_all'		=> 1,
 				'allow_closed_reply'	=> 1,
 			),

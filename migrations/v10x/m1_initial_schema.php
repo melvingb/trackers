@@ -191,8 +191,11 @@ class m1_initial_schema extends \phpbb\db\migration\migration
 				$this->table_prefix . tables::TRACKERS_TRACKER		=> array(
 					'COLUMNS'		=> array(
 						'tracker_id'				=> array('UINT', null, 'auto_increment'),
+						'left_id'					=> array('UINT', 0),
+						'right_id'					=> array('UINT', 0),
 						'tracker_name'				=> array('VCHAR:50', ''),
 						'tracker_email'				=> array('VCHAR:150', ''),
+						'tracker_active'			=> array('BOOL', 0),
 						'allow_view_all'			=> array('BOOL', 0),
 						'allow_closed_reply'		=> array('BOOL', 0),
 					),

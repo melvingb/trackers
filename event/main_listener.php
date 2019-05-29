@@ -109,7 +109,9 @@ class main_listener implements EventSubscriberInterface
 	public function add_page_header_link()
 	{
 		$sql = 'SELECT tracker_id, tracker_name
-			FROM ' . $this->table_prefix . tables::TRACKERS_TRACKER;
+			FROM ' . $this->table_prefix . tables::TRACKERS_TRACKER . '
+			WHERE tracker_active = ' . 1 . '
+			ORDER BY left_id ASC';
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
