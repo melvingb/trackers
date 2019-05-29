@@ -31,9 +31,79 @@ class m2_initial_data extends \phpbb\db\migration\container_aware_migration
 			// Add config data
 			array('config.add', array('tickets_per_page', 25)),
 
+			// Add permissions
+			array('permission.add', array('u_trackers_attach')),
+			array('permission.add', array('u_trackers_post')),
+			array('permission.add', array('u_trackers_reply')),
+			array('permission.add', array('u_trackers_edit')),
+			array('permission.add', array('u_trackers_delete')),
+
+			array('permission.add', array('m_trackers_edit')),
+			array('permission.add', array('m_trackers_delete')),
+			array('permission.add', array('m_trackers_lock')),
+			array('permission.add', array('m_trackers_move')),
+			array('permission.add', array('m_trackers_assign')),
+			array('permission.add', array('m_trackers_chgstatus')),
+			array('permission.add', array('m_trackers_chgpriority')),
+			array('permission.add', array('m_trackers_chgseverity')),
+
+			array('permission.add', array('a_trackers_manage')),
+
 			// Call a custom callable function to perform data insertion
 			array('custom', array(array($this, 'insert_data'))),
 		);
+
+		if ($this->role_exists('ROLE_USER_STANDARD'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_USER_STANDARD', 'u_trackers_attach'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_STANDARD', 'u_trackers_post'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_STANDARD', 'u_trackers_reply'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_STANDARD', 'u_trackers_edit'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_STANDARD', 'u_trackers_delete'));
+		}
+
+		if ($this->role_exists('ROLE_USER_FULL'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_USER_FULL', 'u_trackers_attach'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_FULL', 'u_trackers_post'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_FULL', 'u_trackers_reply'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_FULL', 'u_trackers_edit'));
+			$data[] = array('permission.permission_set', array('ROLE_USER_FULL', 'u_trackers_delete'));
+		}
+
+		if ($this->role_exists('ROLE_MOD_STANDARD'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_edit'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_delete'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_lock'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_move'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_assign'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_chgstatus'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_chgpriority'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_STANDARD', 'm_trackers_chgseverity'));
+		}
+
+		if ($this->role_exists('ROLE_MOD_FULL'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_edit'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_delete'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_lock'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_move'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_assign'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_chgstatus'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_chgpriority'));
+			$data[] = array('permission.permission_set', array('ROLE_MOD_FULL', 'm_trackers_chgseverity'));
+		}
+
+		if ($this->role_exists('ROLE_ADMIN_STANDARD'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_ADMIN_STANDARD', 'a_trackers_manage'));
+		}
+
+		if ($this->role_exists('ROLE_ADMIN_FULL'))
+		{
+			$data[] = array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_trackers_manage'));
+		}
 
 		return $data;
 	}
@@ -729,5 +799,17 @@ class m2_initial_data extends \phpbb\db\migration\container_aware_migration
 		$this->db->sql_multi_insert($this->table_prefix . tables::TRACKERS_SEVERITY, $severity_data);
 		$this->db->sql_multi_insert($this->table_prefix . tables::TRACKERS_STATUS, $status_data);
 		$this->db->sql_multi_insert($this->table_prefix . tables::TRACKERS_TRACKER, $tracker_data);
+	}
+
+	private function role_exists($role)
+	{
+		$sql = 'SELECT role_id
+			FROM ' . ACL_ROLES_TABLE . "
+			WHERE role_name = '" . $this->db->sql_escape($role) . "'";
+		$result = $this->db->sql_query_limit($sql, 1);
+		$role_id = $this->db->sql_fetchfield('role_id');
+		$this->db->sql_freeresult($result);
+
+		return $role_id;
 	}
 }

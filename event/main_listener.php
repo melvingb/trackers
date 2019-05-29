@@ -54,6 +54,7 @@ class main_listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.user_setup'	=> 'load_language_on_setup',
+			'core.permissions'	=> 'add_permission',
 			'core.page_header'	=> 'add_page_header_link',
 		);
 	}
@@ -69,6 +70,37 @@ class main_listener implements EventSubscriberInterface
 			'lang_set' => 'common',
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
+	}
+
+	/**
+	 * Add permissions for Trackers
+	 */
+	public function add_permission($event)
+	{
+		$permissions = $event['permissions'];
+		$categories = $event['categories'];
+
+		$categories['trackers'] = 'ACL_CAT_TRACKERS';
+
+		$permissions['u_trackers_attach'] = array('lang' => 'ACL_U_TRACKERS_ATTACH', 'cat' => 'trackers');
+		$permissions['u_trackers_post'] = array('lang' => 'ACL_U_TRACKERS_POST', 'cat' => 'trackers');
+		$permissions['u_trackers_reply'] = array('lang' => 'ACL_U_TRACKERS_REPLY', 'cat' => 'trackers');
+		$permissions['u_trackers_edit'] = array('lang' => 'ACL_U_TRACKERS_EDIT', 'cat' => 'trackers');
+		$permissions['u_trackers_delete'] = array('lang' => 'ACL_U_TRACKERS_DELETE', 'cat' => 'trackers');
+
+		$permissions['m_trackers_edit'] = array('lang' => 'ACL_M_TRACKERS_EDIT', 'cat' => 'trackers');
+		$permissions['m_trackers_delete'] = array('lang' => 'ACL_M_TRACKERS_DELETE', 'cat' => 'trackers');
+		$permissions['m_trackers_lock'] = array('lang' => 'ACL_M_TRACKERS_LOCK', 'cat' => 'trackers');
+		$permissions['m_trackers_move'] = array('lang' => 'ACL_M_TRACKERS_MOVE', 'cat' => 'trackers');
+		$permissions['m_trackers_assign'] = array('lang' => 'ACL_M_TRACKERS_ASSIGN', 'cat' => 'trackers');
+		$permissions['m_trackers_chgstatus'] = array('lang' => 'ACL_M_TRACKERS_CHGSTATUS', 'cat' => 'trackers');
+		$permissions['m_trackers_chgpriority'] = array('lang' => 'ACL_M_TRACKERS_CHGPRIORITY', 'cat' => 'trackers');
+		$permissions['m_trackers_chgseverity'] = array('lang' => 'ACL_M_TRACKERS_CHGSEVERITY', 'cat' => 'trackers');
+
+		$permissions['a_trackers_manage'] = array('lang' => 'ACL_A_TRACKERS_MANAGE', 'cat' => 'trackers');
+
+		$event['categories'] = $categories;
+		$event['permissions'] = $permissions;
 	}
 
 	/**
