@@ -1,0 +1,52 @@
+<!-- INCLUDECSS @kinerity_trackers/common.css -->
+<!-- INCLUDE overall_header.html -->
+
+<div class="extras">
+	<div class="mini-panel">
+	<div class="inner">
+		<h3>{TRACKER_NAME}</h3>
+		<ul class="menu">
+			<li><a href="{U_STATISTICS}">{L_STATISTICS}</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<div class="main">
+	<h2 class="forum-title">{TRACKER_NAME}</h2>
+
+	<p>{L_TRACKER_EXPLAIN}</p>
+	<!-- IF S_TRACKER_PRIVATE --><p><strong>{L_TRACKER_PRIVATE}</strong></p><!-- ENDIF -->
+
+	<div class="forabg">
+		<div class="inner">
+		<table class="table1" cellspacing="0">
+			<colgroup>
+				<col width="200" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>{L_PROJECT}</th>
+					<th>{L_DESCRIPTION}</th>
+				</tr>
+			</thead>
+			<tbody>
+			<!-- IF projectrow -->
+			<!-- BEGIN projectrow -->
+			<tr class="<!-- IF projectrow.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+				<td><a href="{projectrow.U_VIEWPROJECT}">{projectrow.PROJECT_NAME}</a></td>
+				<td>{projectrow.DESCRIPTION}</td>
+			</tr>
+			<!-- END projectrow -->
+			<!-- ELSE -->
+			<tr class="error">
+				<td class="bg1 error" colspan="2">{L_NO_PROJECTS}</td>
+			</tr>
+			<!-- ENDIF -->
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

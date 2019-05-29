@@ -1,0 +1,87 @@
+.main {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	position: relative;
+	overflow: hidden;
+}
+
+.main h3 {
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	font-size: 1.2em;
+	text-transform: none;
+	color: #d21a4e;
+	border-bottom: none;
+}
+
+.main h3 span {
+	color: #222222;
+}
+
+.wide {
+	width: 100% !important;
+}
+
+.extras {
+	float: right;
+	width: 260px;
+	margin: 26px 0 30px 30px;
+}
+
+.mini-panel {
+	background-color: #ebebeb;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	margin-bottom: 5px;
+	padding: 5px 10px;
+}
+
+.mini-panel h3 {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	color: #333333;
+	margin: 5px 0 0;
+}
+
+.menu {
+	border-top: 1px solid #ffffff;
+	list-style: none;
+}
+
+.menu li {
+	border-bottom: 1px solid #cccccc;
+	margin: 0;
+	padding: 5px 0 4px;
+}
+
+.menu li:last-child {
+	border-bottom: none;
+}
+
+h3.ticket-closed {
+	text-decoration: line-through;
+}
+
+
+
+
+
+table.table1 thead th {
+	text-align: left;
+}
+
+.component, .assigned, .status {
+	text-align: center !important;
+}
+
+tr.error {
+	height: 50px;
+}
+
+td.error {
+	text-align: center;
+}
+
+
+
+
+
+

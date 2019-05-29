@@ -1,0 +1,64 @@
+services:
+    kinerity.trackers.controller.main:
+        class: kinerity\trackers\controller\main_controller
+        arguments:
+            - '@service_container'
+            - '@language'
+
+    kinerity.trackers.listener:
+        class: kinerity\trackers\event\main_listener
+        arguments:
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@template'
+            - '%core.table_prefix%'
+        tags:
+            - { name: event.listener }
+
+    kinerity.trackers.functions.tracker:
+        class: kinerity\trackers\includes\functions_tracker
+        arguments:
+            - '@auth'
+            - '@config'
+            - '@service_container'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%core.table_prefix%'
+
+    kinerity.trackers.viewtracker:
+        class: kinerity\trackers\operators\viewtracker
+        arguments:
+            - '@service_container'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+
+    kinerity.trackers.viewproject:
+        class: kinerity\trackers\operators\viewproject
+        arguments:
+            - '@config'
+            - '@service_container'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+
+    kinerity.trackers.viewticket:
+        class: kinerity\trackers\operators\viewticket
+        arguments:
+            - '@config'
+            - '@service_container'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'

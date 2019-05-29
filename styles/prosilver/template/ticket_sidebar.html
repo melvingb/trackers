@@ -1,0 +1,36 @@
+	<div class="mini-panel">
+	<div class="inner">
+		<h3>Ticket details</h3>
+		<ul class="menu">
+			<!-- BEGIN ticket_details -->
+			<li><strong>{ticket_details.NAME}{L_COLON}</strong> {ticket_details.VALUE}</li>
+			<!-- END ticket_details -->
+		</ul>
+	</div>
+	</div>
+
+	<!-- IF .duplicates -->
+	<div class="mini-panel">
+	<div class="inner">
+		<h3>Duplicates of this ticket</h3>
+		<ul class="menu">
+			<li>
+				<!-- BEGIN duplicates --><a href="{duplicates.U_TICKET}" title="{duplicates.TITLE}">#{duplicates.ID}</a><!-- IF not duplicates.S_LAST_ROW -->, <!-- ENDIF --><!-- END duplicates -->
+			</li>
+		</ul>
+	</div>
+	</div>
+	<!-- ENDIF -->
+
+	<!-- IF .duplicates_other -->
+	<div class="mini-panel">
+	<div class="inner">
+		<h3>Duplicates of #{DUPLICATE_ID}</h3>
+		<ul class="menu">
+			<li>
+				<!-- BEGIN duplicates_other --><a href="{duplicates_other.U_TICKET}" title="{duplicates_other.TITLE}">#{duplicates_other.ID}</a><!-- IF not duplicates_other.S_LAST_ROW -->, <!-- ENDIF --><!-- END duplicates_other -->
+			</li>
+		</ul>
+	</div>
+	</div>
+	<!-- ENDIF -->
