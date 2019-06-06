@@ -112,7 +112,7 @@ class trackers_module
 
 					$sql_ary = array(
 						'tracker_name'			=> $this->request->variable('tracker_name', '', true),
-						'tracker_email'			=> $this->request->variable('tracker_name', '', true),
+						'tracker_email'			=> $this->request->variable('tracker_email', '', true),
 						'tracker_active'		=> $this->request->variable('tracker_active', 0),
 						'allow_closed_reply'	=> $this->request->variable('allow_closed_reply', 0),
 					);
