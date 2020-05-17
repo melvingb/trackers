@@ -1,43 +1,45 @@
-<!-- INCLUDECSS @kinerity_trackers/common.css -->
-<!-- INCLUDE overall_header.html -->
+{% INCLUDECSS '@kinerity_trackers/common.css' %}
+{% include 'overall_header.html' %}
 
 <div class="main wide">
-	<h2 class="forum-title">{TRACKER_NAME}</h2>
+	<h2 class="forum-title">{{ TRACKER_NAME }}</h2>
 
-	<div class="post bg2" style="text-align: center;">
-		<div class="inner"><strong>{L_FILTER_STATUS}{L_COLON}</strong> {STATUS}</div>
+	<div class="post bg2">
+		<div class="inner">
+		<strong>{{ lang('CURRENT_STATUS') }}{{ lang('COLON') }}</strong> {{ STATUS }}
+		</div>
 	</div>
-<br />
+
 	<div class="action-bar bar-top">
-		<a href="{U_POST_NEW_TICKET}" class="button" title="{L_POST_TICKET}">
-			<span>{L_BUTTON_NEW_TICKET}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+		<a href="{{ U_POST_NEW_TICKET }}" class="button" title="{{ lang('POST_TICKET') }}">
+			<span>{{ lang('BUTTON_NEW_TICKET') }}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
 		</a>
 
 		<div class="search-box">
-			<form method="get" id="ticket_status_form" action="{U_ACTION}"><fieldset>
+			<form method="get" id="ticket_status_form" action="{{ U_ACTION }}"><fieldset>
 			<label for="ticket_status">
-				<strong>{L_FILTER_TICKETS}{L_COLON}</strong>
+				<strong>{{ lang('FILTER_TICKETS') }}{{ lang('COLON') }}</strong>
 			</label>
 			<select id="ticket_status" name="ticket_status" onchange="document.getElementById('ticket_status_form').submit();">
-				<option value="-1"<!-- IF STATUS_ID == -1 --> selected="selected"<!-- ENDIF -->>{L_ALL_TICKETS}</option>
-				<option value="0"<!-- IF STATUS_ID == 0 --> selected="selected"<!-- ENDIF -->>{L_ALL_OPEN}</option>
-				<option value="-2"<!-- IF STATUS_ID == -2 --> selected="selected"<!-- ENDIF -->>{L_ALL_CLOSED}</option>
-				<!-- BEGIN statuses -->
-				<option value="{statuses.ID}"<!-- IF statuses.ID == STATUS_ID --> selected="selected"<!-- ENDIF -->>{statuses.NAME}</option>
-				<!-- END statuses -->
+				<option value="-1"{% if STATUS_ID == -1 %} selected="selected"{% endif %}>{{ lang('ALL_TICKETS') }}</option>
+				<option value="0"{% if STATUS_ID == 0 %} selected="selected"{% endif %}>{{ lang('ALL_OPEN') }}</option>
+				<option value="-2"{% if STATUS_ID == -2 %} selected="selected"{% endif %}>{{ lang('ALL_CLOSED') }}</option>
+				{% for status in status_ary %}
+				<option value="{{ status.ID }}"{% if status.ID == STATUS_ID %} selected="selected"{% endif %}>{{ status.NAME }}</option>
+				{% endfor %}
 			</select>
-			<noscript><p><input type="submit" name="submit" value="{L_SUBMIT}" class="button2" /></p></noscript>
-			{S_HIDDEN_FIELDS}
+			<noscript><p><input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button2" /></p></noscript>
+			{{ S_HIDDEN_FIELDS }}
 			</fieldset></form>
 		</div>
 
 		<div class="pagination">
-			{TOTAL_TICKETS}
-			<!-- IF .pagination -->
-				<!-- INCLUDE pagination.html -->
-			<!-- ELSE -->
-				&bull; {PAGE_NUMBER}
-			<!-- ENDIF -->
+			{{ TOTAL_TICKETS }}
+			{% if pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
 		</div>
 	</div>
 
@@ -53,36 +55,36 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th>#</th>
-					<th>Title</th>
-					<th class="component">Component</th>
-					<th class="assigned">Assigned to</th>
-					<th class="status">Status</th>
+					<th align="left">#</th>
+					<th align="left">{{ lang('TITLE') }}</th>
+					<th align="center">{{ lang('COMPONENT') }}</th>
+					<th align="center">{{ lang('ASSIGNED') }}</th>
+					<th align="center">{{ lang('STATUS') }}</th>
 				</tr>
 			</thead>
 			<tbody>
-			<!-- IF ticketrow -->
-			<!-- BEGIN ticketrow -->
-				<tr class="<!-- IF ticketrow.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->"<!-- IF ticketrow.SEV_COLOUR --> style="background-color: #{ticketrow.SEV_COLOUR};"<!-- ENDIF -->>
-					<td><strong>{ticketrow.ID}</strong></td>
+				{% if tickets %}
+				{% for ticket in tickets %}
+				<tr class="{% if ticket.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+					<td><strong>{{ ticket.ID }}</strong></td>
 					<td>
-						<!-- IF ticketrow.S_PRIVATE --><em><!-- ENDIF --><strong><a href="{ticketrow.U_VIEWTICKET}">{ticketrow.TITLE}</a></strong><!-- IF ticketrow.S_PRIVATE --></em><!-- ENDIF --><!-- IF ticketrow.S_NEW && not ticketrow.ASSIGNED --> <span><i class="icon fa-file fa-fw icon-red icon-md" aria-hidden="true"></i></span><!-- ENDIF --><br />
-						<span class="small">{ticketrow.REPORTER} &raquo; {ticketrow.TIMESTAMP}<!-- IF ticketrow.LPOSTER --><br />{L_LAST_POST} {L_POST_BY_AUTHOR} {ticketrow.LPOSTER} &raquo; {ticketrow.LTIMESTAMP}<!-- ENDIF --></span>
+						{% if ticket.S_PRIVATE %}<i>{% endif %}<strong><a href="{{ ticket.U_VIEWTICKET }}">{{ ticket.TITLE }}</a></strong>{% if ticket.S_PRIVATE %}</i>{% endif %}<br />
+						<span class="small">{{ ticket.REPORTER }} &raquo; {{ ticket.TIMESTAMP }}</span>
 					</td>
-					<td class="component"><!-- IF ticketrow.COMPONENT -->{ticketrow.COMPONENT}<!-- ELSE -->{L_UNKNOWN}<!-- ENDIF --></td>
-					<td class="assigned"><!-- IF ticketrow.ASSIGNED --><strong>{ticketrow.ASSIGNED}</strong><!-- ELSE -->{L_UNASSIGNED}<!-- ENDIF --></td>
-					<td class="status">{ticketrow.STATUS}<!-- IF ticketrow.DUPLICATE_ID --> of #<a href="{ticketrow.U_DUPLICATE}">{ticketrow.DUPLICATE_ID}</a><!-- ENDIF --></td>
+					<td align="center">{% if ticket.COMPONENT %}{{ ticket.COMPONENT }}{% else %}({{ lang('UNKNOWN') }}){% endif %}</td>
+					<td align="center">{% if ticket.ASSIGNED %}<strong>{{ ticket.ASSIGNED }}</strong>{% else %}({{ lang('UNASSIGNED') }}){% endif %}</td>
+					<td align="center">{{ ticket.STATUS }}{% if ticket.DUPLICATE_ID %} (#<strong><a href="{{ ticket.U_DUPLICATE }}">{{ ticket.DUPLICATE_ID }}</a></strong>){% endif %}</td>
 				</tr>
-			<!-- END ticketrow -->
-			<!-- ELSE -->
-			<tr class="error">
-				<td class="bg1 error" colspan="5">{L_NO_TICKETS}</td>
-			</tr>
-			<!-- ENDIF -->
+				{% endfor %}
+				{% else %}
+				<tr class="error">
+					<td class="bg1 error" colspan="5">{{ lang('NO_TICKETS') }}</td>
+				</tr>
+				{% endif %}
 			</tbody>
 		</table>
 		</div>
 	</div>
 </div>
 
-<!-- INCLUDE overall_footer.html -->
+{% include 'overall_footer.html' %}

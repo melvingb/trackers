@@ -1,3 +1,5 @@
+/* Trackers Style Sheet
+---------------------------------------- */
 .main {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	position: relative;
@@ -5,15 +7,14 @@
 }
 
 .main h3 {
-	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
-	font-size: 1.2em;
 	text-transform: none;
-	color: #d21a4e;
 	border-bottom: none;
+	font-size: 1.2em;
 }
 
 .main h3 span {
-	color: #222222;
+	text-transform: lowercase;
+	color: #000000;
 }
 
 .wide {
@@ -56,22 +57,6 @@
 	border-bottom: none;
 }
 
-h3.ticket-closed {
-	text-decoration: line-through;
-}
-
-
-
-
-
-table.table1 thead th {
-	text-align: left;
-}
-
-.component, .assigned, .status {
-	text-align: center !important;
-}
-
 tr.error {
 	height: 50px;
 }
@@ -80,8 +65,24 @@ td.error {
 	text-align: center;
 }
 
+.ticket-closed {
+	text-decoration: line-through;
+}
 
+.history {
+	background-color: #FBFBFB;
+}
 
+span.post_private {
+	color: #FF0000;
+	font-weight: bold;
+}
 
+.small {
+	font-size: 9px;
+}
 
-
+.comment-buttons {
+	margin-top: -18px;
+	margin-bottom: 9px;
+}

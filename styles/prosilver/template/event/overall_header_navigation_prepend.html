@@ -1,19 +1,19 @@
-<!-- IF .trackers -->
-<li id="trackers" class="dropdown-container responsive-menu" data-skip-responsive="true">
+{% if trackers %}
+<li id="trackers" class="dropdown-container responsive-menu" data-last-responsive="true">
 	<a href="#" class="dropdown-trigger">
-		<i class="icon fa-bars fa-fw" aria-hidden="true"></i><span>{L_TRACKERS}</span>
+		<i class="icon fa-bars fa-fw" aria-hidden="true"></i><span>{{ lang('TRACKERS') }}</span>
 	</a>
 	<div class="dropdown">
 		<div class="pointer"><div class="pointer-inner"></div></div>
 		<ul class="dropdown-contents" role="menu">
-			<!-- BEGIN trackers -->
+			{% for tracker in trackers %}
 			<li>
-				<a href="{trackers.U_VIEWTRACKER}" role="menuitem">
-					<i class="icon fa-file-o fa-fw icon-gray" aria-hidden="true"></i><span>{trackers.TRACKER_NAME}</span>
+				<a href="{{ tracker.U_VIEWTRACKER }}" role="menuitem">
+					<i class="icon fa-file-o fa-fw icon-gray" aria-hidden="true"></i><span>{{ tracker.TRACKER_NAME }}</span>
 				</a>
 			</li>
-			<!-- END trackers -->
+			{% endfor %}
 		</ul>
 	</div>
 </li>
-<!-- ENDIF -->
+{% endif %}

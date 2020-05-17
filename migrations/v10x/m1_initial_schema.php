@@ -3,226 +3,197 @@
  *
  * Trackers extension for the phpBB Forum Software package
  *
- * @copyright (c) 2019, kinerity, https://www.layer-3.org/
+ * @copyright (c) 2020, kinerity, https://www.layer-3.org/
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
 namespace kinerity\trackers\migrations\v10x;
 
-use kinerity\trackers\tables;
-
-/**
- * Migration stage 1: Initial schema
- */
 class m1_initial_schema extends \phpbb\db\migration\migration
 {
-	public function effectively_installed()
-	{
-		return $this->db_tools->sql_table_exists($this->table_prefix . tables::TRACKERS_TRACKER);
-	}
-
 	public static function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v320\v320');
+		return ['\phpbb\db\migration\data\v330\v330'];
 	}
 
 	/**
-	 * Add the table schema to the database
+	 * Update database schema
 	 */
 	public function update_schema()
 	{
-		return array(
-			'add_tables'		=> array(
-				$this->table_prefix . tables::TRACKERS_ATTACHMENT	=> array(
-					'COLUMNS'		=> array(
-						'attachment_id'				=> array('UINT', null, 'auto_increment'),
-						'post_id'					=> array('UINT', 0),
-						'attachment_private'		=> array('BOOL', 0),
-						'attachment_file'			=> array('VCHAR:40', ''),
-						'attachment_title'			=> array('VCHAR:50', ''),
-						'attachment_size'			=> array('INT:10', 0),
-						'mimetype'					=> array('VCHAR:255', ''),
-						'attachment_data'			=> array('MTEXT_UNI', ''),
-					),
+		return [
+			'add_tables'		=> [
+				$this->table_prefix . 'trackers_attachment'		=> [
+					'COLUMNS'		=> [
+						'attachment_id'			=> ['UINT', null, 'auto_increment'],
+						'post_id'				=> ['UINT', 0],
+						'attachment_private'	=> ['BOOL', 0],
+						'attachment_file'		=> ['VCHAR:40', ''],
+						'attachment_title'		=> ['VCHAR:50', ''],
+						'attachment_size'		=> ['INT:10', 0],
+						'mimetype'				=> ['VCHAR:255', ''],
+						'attachment_data'		=> ['MTEXT_UNI', ''],
+					],
 					'PRIMARY_KEY'	=> 'attachment_id',
-					'KEYS'			=> array(
-						'post_id'		=> array('INDEX', array('post_id')),
-					),
-				),
+					'KEYS'			=> [
+						'post_id'		=> ['INDEX', ['post_id']],
+					],
+				],
 
-				$this->table_prefix . tables::TRACKERS_COMPONENT	=> array(
-					'COLUMNS'		=> array(
-						'component_id'				=> array('UINT', null, 'auto_increment'),
-						'project_id'				=> array('UINT', 0),
-						'component_name'			=> array('VCHAR:50', ''),
-					),
+				$this->table_prefix . 'trackers_component'		=> [
+					'COLUMNS'		=> [
+						'component_id'			=> ['UINT', null, 'auto_increment'],
+						'project_id'			=> ['UINT', 0],
+						'component_name'		=> ['VCHAR:50', ''],
+					],
 					'PRIMARY_KEY'	=> 'component_id',
-					'KEYS'			=> array(
-						'project_id'	=> array('INDEX', array('project_id')),
-					),
-				),
+					'KEYS'			=> [
+						'project_id'	=> ['INDEX', ['project_id']],
+					],
+				],
 
-				$this->table_prefix . tables::TRACKERS_HISTORY		=> array(
-					'COLUMNS'		=> array(
-						'history_id'				=> array('UINT', null, 'auto_increment'),
-						'ticket_id'					=> array('UINT', 0),
-						'user_id'					=> array('UINT', 0),
-						'history_text'				=> array('MTEXT_UNI', ''),
-						'history_timestamp'			=> array('TIMESTAMP', 0),
-						'history_type'				=> array('TINT:3', 0),
-					),
+				$this->table_prefix . 'trackers_history'		=> [
+					'COLUMNS'		=> [
+						'history_id'			=> ['UINT', null, 'auto_increment'],
+						'ticket_id'				=> ['UINT', 0],
+						'user_id'				=> ['UINT', 0],
+						'history_text'			=> ['MTEXT_UNI', ''],
+						'history_timestamp'		=> ['TIMESTAMP', 0],
+						'history_type'			=> ['TINT:3', 0],
+					],
 					'PRIMARY_KEY'	=> 'history_id',
-				),
+				],
 
-				$this->table_prefix . tables::TRACKERS_POST			=> array(
-					'COLUMNS'		=> array(
-						'post_id'					=> array('UINT', null, 'auto_increment'),
-						'ticket_id'					=> array('UINT', 0),
-						'user_id'					=> array('UINT', 0),
-						'post_private'				=> array('BOOL', 0),
-						'ticket_title'				=> array('VCHAR:100', ''),
-						'post_text'					=> array('TEXT_UNI', ''),
-						'post_ip'					=> array('VCHAR:40', ''),
-						'post_timestamp'			=> array('TIMESTAMP', 0),
-						'bbcode_bitfield'			=> array('VCHAR:255', ''),
-						'bbcode_uid'				=> array('VCHAR:8', ''),
-						'bbcode_flags'				=> array('INT:11', 0),
-					),
+				$this->table_prefix . 'trackers_post'			=> [
+					'COLUMNS'		=> [
+						'post_id'				=> ['UINT', null, 'auto_increment'],
+						'ticket_id'				=> ['UINT', 0],
+						'user_id'				=> ['UINT', 0],
+						'post_private'			=> ['BOOL', 0],
+						'ticket_title'			=> ['VCHAR:100', ''],
+						'post_text'				=> ['TEXT_UNI', ''],
+						'post_ip'				=> ['VCHAR:40', ''],
+						'post_timestamp'		=> ['TIMESTAMP', 0],
+						'bbcode_bitfield'		=> ['VCHAR:255', ''],
+						'bbcode_uid'			=> ['VCHAR:8', ''],
+						'bbcode_flags'			=> ['INT:11', 0],
+					],
 					'PRIMARY_KEY'	=> 'post_id',
-					'KEYS'			=> array(
-						'ticket_id'		=> array('INDEX', array('ticket_id')),
-					),
-				),
+					'KEYS'			=> [
+						'ticket_id'		=> ['INDEX', ['ticket_id']],
+					],
+				],
 
-				$this->table_prefix . tables::TRACKERS_PROJECT		=> array(
-					'COLUMNS'		=> array(
-						'project_id'				=> array('UINT', null, 'auto_increment'),
-						'tracker_id'				=> array('UINT', 0),
-						'project_name'				=> array('VCHAR:50', ''),
-						'project_description'		=> array('VCHAR:255', ''),
-						'project_note'				=> array('MTEXT_UNI', ''),
-						'project_private'			=> array('BOOL', 0),
-						'project_active'			=> array('BOOL', 0),
-					),
+				$this->table_prefix . 'trackers_project'		=> [
+					'COLUMNS'		=> [
+						'project_id'			=> ['UINT', null, 'auto_increment'],
+						'tracker_id'			=> ['UINT', 0],
+						'project_name'			=> ['VCHAR:50', ''],
+						'project_description'	=> ['VCHAR:255', ''],
+						'project_note'			=> ['MTEXT_UNI', ''],
+						'project_private'		=> ['BOOL', 0],
+						'project_active'		=> ['BOOL', 0],
+					],
 					'PRIMARY_KEY'	=> 'project_id',
-				),
+				],
 
-				$this->table_prefix . tables::TRACKERS_PROJECT_AUTH	=> array(
-					'COLUMNS'		=> array(
-						'project_id'				=> array('UINT', 0),
-						'group_id'					=> array('UINT', 0),
-						'user_id'					=> array('UINT', 0),
-					),
-				),
+				$this->table_prefix . 'trackers_project_auth'	=> [
+					'COLUMNS'		=> [
+						'project_id'			=> ['UINT', 0],
+						'group_id'				=> ['UINT', 0],
+						'user_id'				=> ['UINT', 0],
+					],
+				],
 
-				$this->table_prefix . tables::TRACKERS_SEVERITY		=> array(
-					'COLUMNS'		=> array(
-						'severity_id'				=> array('UINT', null, 'auto_increment'),
-						'tracker_id'				=> array('UINT', 0),
-						'severity_name'				=> array('VCHAR:50', ''),
-						'severity_colour'			=> array('VCHAR:6', ''),
-						'severity_order'			=> array('TINT:2', 0),
-					),
+				$this->table_prefix . 'trackers_severity'		=> [
+					'COLUMNS'		=> [
+						'severity_id'			=> ['UINT', null, 'auto_increment'],
+						'tracker_id'			=> ['UINT', 0],
+						'severity_name'			=> ['VCHAR:50', ''],
+						'severity_colour'		=> ['VCHAR:6', ''],
+						'severity_order'		=> ['TINT:2', 0],
+					],
 					'PRIMARY_KEY'	=> 'severity_id',
-				),
+				],
 
-				$this->table_prefix . tables::TRACKERS_STATUS		=> array(
-					'COLUMNS'		=> array(
-						'status_id'					=> array('UINT', null, 'auto_increment'),
-						'tracker_id'				=> array('UINT', 0),
-						'status_name'				=> array('VCHAR:50', ''),
-						'status_description'		=> array('MTEXT_UNI', ''),
-						'status_order'				=> array('UINT', 0),
-						'ticket_new'				=> array('BOOL', 0),
-						'ticket_reviewed'			=> array('BOOL', 0),
-						'ticket_closed'				=> array('BOOL', 0),
-						'ticket_fixed'				=> array('BOOL', 0),
-						'ticket_duplicate'			=> array('BOOL', 0),
-					),
+				$this->table_prefix . 'trackers_status'			=> [
+					'COLUMNS'		=> [
+						'status_id'				=> ['UINT', null, 'auto_increment'],
+						'tracker_id'			=> ['UINT', 0],
+						'status_name'			=> ['VCHAR:50', ''],
+						'status_description'	=> ['MTEXT_UNI', ''],
+						'status_order'			=> ['UINT', 0],
+						'ticket_new'			=> ['BOOL', 0],
+						'ticket_reviewed'		=> ['BOOL', 0],
+						'ticket_closed'			=> ['BOOL', 0],
+						'ticket_fixed'			=> ['BOOL', 0],
+						'ticket_duplicate'		=> ['BOOL', 0],
+					],
 					'PRIMARY_KEY'	=> 'status_id',
-				),
+				],
 
-				$this->table_prefix . tables::TRACKERS_STATUS		=> array(
-					'COLUMNS'		=> array(
-						'status_id'					=> array('UINT', null, 'auto_increment'),
-						'tracker_id'				=> array('UINT', 0),
-						'status_name'				=> array('VCHAR:50', ''),
-						'status_description'		=> array('MTEXT_UNI', ''),
-						'status_order'				=> array('UINT', 0),
-						'ticket_new'				=> array('BOOL', 0),
-						'ticket_reviewed'			=> array('BOOL', 0),
-						'ticket_closed'				=> array('BOOL', 0),
-						'ticket_fixed'				=> array('BOOL', 0),
-						'ticket_duplicate'			=> array('BOOL', 0),
-					),
-					'PRIMARY_KEY'	=> 'status_id',
-				),
-
-				$this->table_prefix . tables::TRACKERS_TICKET		=> array(
-					'COLUMNS'		=> array(
-						'ticket_id'					=> array('UINT', null, 'auto_increment'),
-						'project_id'				=> array('UINT', 0),
-						'post_id'					=> array('UINT', 0),
-						'user_id'					=> array('UINT', 0),
-						'reporter_ip'				=> array('VCHAR:40', ''),
-						'user_last_id'				=> array('UINT', 0),
-						'status_id'					=> array('UINT', 0),
-						'component_id'				=> array('UINT', 0),
-						'severity_id'				=> array('UINT', 0),
-						'duplicate_id'				=> array('UINT', 0),
-						'ticket_private'			=> array('BOOL', 0),
-						'ticket_title'				=> array('VCHAR:100', ''),
-						'ticket_locked'				=> array('BOOL', 0),
-						'assigned_group'			=> array('UINT', 0),
-						'assigned_user'				=> array('UINT', 0),
-						'timestamp_created'			=> array('TIMESTAMP', 0),
-					),
+				$this->table_prefix . 'trackers_ticket'			=> [
+					'COLUMNS'		=> [
+						'ticket_id'				=> ['UINT', null, 'auto_increment'],
+						'project_id'			=> ['UINT', 0],
+						'post_id'				=> ['UINT', 0],
+						'user_id'				=> ['UINT', 0],
+						'reporter_ip'			=> ['VCHAR:40', ''],
+						'user_last_id'			=> ['UINT', 0],
+						'status_id'				=> ['UINT', 0],
+						'component_id'			=> ['UINT', 0],
+						'severity_id'			=> ['UINT', 0],
+						'duplicate_id'			=> ['UINT', 0],
+						'ticket_private'		=> ['BOOL', 0],
+						'ticket_title'			=> ['VCHAR:100', ''],
+						'ticket_locked'			=> ['BOOL', 0],
+						'assigned_group'		=> ['UINT', 0],
+						'assigned_user'			=> ['UINT', 0],
+						'timestamp_created'		=> ['TIMESTAMP', 0],
+					],
 					'PRIMARY_KEY'	=> 'ticket_id',
-					'KEYS'			=> array(
-						'project_id'	=> array('INDEX', array('project_id')),
-						'user_id'		=> array('INDEX', array('user_id')),
-						'status_id'		=> array('INDEX', array('status_id')),
-						'severity_id'	=> array('INDEX', array('severity_id')),
-						'component_id'	=> array('INDEX', array('component_id')),
-					),
-				),
+					'KEYS'			=> [
+						'project_id'	=> ['INDEX', ['project_id']],
+						'user_id'		=> ['INDEX', ['user_id']],
+						'status_id'		=> ['INDEX', ['status_id']],
+						'severity_id'	=> ['INDEX', ['severity_id']],
+						'component_id'	=> ['INDEX', ['component_id']],
+					],
+				],
 
-				$this->table_prefix . tables::TRACKERS_TRACKER		=> array(
-					'COLUMNS'		=> array(
-						'tracker_id'				=> array('UINT', null, 'auto_increment'),
-						'left_id'					=> array('UINT', 0),
-						'right_id'					=> array('UINT', 0),
-						'tracker_name'				=> array('VCHAR:50', ''),
-						'tracker_email'				=> array('VCHAR:150', ''),
-						'tracker_active'			=> array('BOOL', 0),
-						'allow_view_all'			=> array('BOOL', 0),
-						'allow_closed_reply'		=> array('BOOL', 0),
-					),
+				$this->table_prefix . 'trackers_tracker'		=> [
+					'COLUMNS'		=> [
+						'tracker_id'			=> ['UINT', null, 'auto_increment'],
+						'tracker_name'			=> ['VCHAR:255', ''],
+						'tracker_email'			=> ['VCHAR:255', ''],
+						'allow_view_all'		=> ['BOOL', 0],
+						'allow_closed_reply'	=> ['BOOL', 0],
+					],
 					'PRIMARY_KEY'	=> 'tracker_id',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 	/**
-	 * Drop the table schema to the database
+	 * Revert database schema changes
 	 */
 	public function revert_schema()
 	{
-		return array(
-			'drop_tables'		=> array(
-				$this->table_prefix . tables::TRACKERS_ATTACHMENT,
-				$this->table_prefix . tables::TRACKERS_COMPONENT,
-				$this->table_prefix . tables::TRACKERS_HISTORY,
-				$this->table_prefix . tables::TRACKERS_POST,
-				$this->table_prefix . tables::TRACKERS_PROJECT,
-				$this->table_prefix . tables::TRACKERS_PROJECT_AUTH,
-				$this->table_prefix . tables::TRACKERS_SEVERITY,
-				$this->table_prefix . tables::TRACKERS_STATUS,
-				$this->table_prefix . tables::TRACKERS_TICKET,
-				$this->table_prefix . tables::TRACKERS_TRACKER,
-			),
-		);
+		return [
+			'drop_tables'		=> [
+				$this->table_prefix . 'trackers_attachment',
+				$this->table_prefix . 'trackers_component',
+				$this->table_prefix . 'trackers_history',
+				$this->table_prefix . 'trackers_post',
+				$this->table_prefix . 'trackers_project',
+				$this->table_prefix . 'trackers_project_auth',
+				$this->table_prefix . 'trackers_severity',
+				$this->table_prefix . 'trackers_status',
+				$this->table_prefix . 'trackers_ticket',
+				$this->table_prefix . 'trackers_tracker',
+			],
+		];
 	}
 }

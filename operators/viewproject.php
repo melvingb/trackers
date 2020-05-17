@@ -3,7 +3,7 @@
  *
  * Trackers extension for the phpBB Forum Software package
  *
- * @copyright (c) 2019, kinerity, https://www.layer-3.org/
+ * @copyright (c) 2020, kinerity, https://www.layer-3.org/
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -12,49 +12,52 @@ namespace kinerity\trackers\operators;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Viewproject operator
+ */
 class viewproject
 {
-	/* @var \phpbb\config\config */
+	/** @var \phpbb\config\config */
 	protected $config;
 
-	/* @var ContainerInterface */
+	/** @var ContainerInterface */
 	protected $container;
 
-	/* @var \phpbb\controller\helper */
-	protected $helper;
-
-	/* @var \phpbb\language\language */
+	/** @var \phpbb\language\language */
 	protected $language;
 
-	/* @var \phpbb\request\request */
+	/** @var \phpbb\controller\helper */
+	protected $helper;
+
+	/** @var \phpbb\request\request */
 	protected $request;
 
-	/* @var \phpbb\template\template */
+	/** @var \phpbb\template\template */
 	protected $template;
 
-	/* @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
 
 	/**
 	 * Constructor
 	 *
-	 * @param \phpbb\config\config               $config
-	 * @param ContainerInterface                 $container
-	 * @param \phpbb\controller\helper           $helper
-	 * @param \phpbb\language\language           $language
-	 * @param \phpbb\request\request             $request
-	 * @param \phpbb\template\template           $template
-	 * @param \phpbb\user                        $user
+	 * @param \phpbb\config\config      $config
+	 * @param ContainerInterface        $container
+	 * @param \phpbb\language\language  $language
+	 * @param \phpbb\controller\helper  $helper
+	 * @param \phpbb\request\request    $request
+	 * @param \phpbb\template\template  $template
+	 * @param \phpbb\user               $user
 	 */
-	public function __construct(\phpbb\config\config $config, ContainerInterface $container, \phpbb\controller\helper $helper, \phpbb\language\language $language, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user)
+	public function __construct(\phpbb\config\config $config, ContainerInterface $container, \phpbb\language\language $language, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user)
 	{
 		$this->config = $config;
 		$this->container = $container;
-		$this->helper = $helper;
 		$this->language = $language;
+		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
-		$this->user = $user; // Not used?
+		$this->user = $user;
 	}
 
 	public function display()
@@ -67,18 +70,18 @@ class viewproject
 
 		$pagination = $this->container->get('pagination');
 
-		$s_hidden_fields = build_hidden_fields(array('t' => (int) $tracker_id, 'p' => (int) $project_id));
+		$s_hidden_fields = build_hidden_fields(['t' => (int) $tracker_id, 'p' => (int) $project_id]);
 
-		$tracker = $this->container->get('kinerity.trackers.functions.tracker')->get_tracker_data($tracker_id);
-		$project = $this->container->get('kinerity.trackers.functions.tracker')->get_project_data($project_id);
-		$statuses = $this->container->get('kinerity.trackers.functions.tracker')->get_statuses($tracker_id);
+		$tracker = $this->container->get('kinerity.trackers.functions')->get_tracker_data($tracker_id);
+		$project = $this->container->get('kinerity.trackers.functions')->get_project_data($project_id);
+		$status = $this->container->get('kinerity.trackers.functions')->get_status($tracker_id);
 
-		foreach ($statuses as $status_id => $status_data)
+		foreach ($status as $status_id => $status_data)
 		{
-			$this->template->assign_block_vars('statuses', array(
+			$this->template->assign_block_vars('status_ary', [
 				'ID'	=> $status_id,
 				'NAME'	=> $status_data['status_name'],
-			));
+			]);
 
 			if ($status_data['ticket_new'])
 			{
@@ -86,17 +89,14 @@ class viewproject
 			}
 		}
 
-		$sql = $this->container->get('kinerity.trackers.functions.tracker')->tickets_sql($tracker, $project_id, $ticket_status);
-
-		$total_tickets = $this->container->get('kinerity.trackers.functions.tracker')->get_total_tickets($sql);
+		$total_tickets = $this->container->get('kinerity.trackers.functions')->get_total_tickets($tracker, $project_id, $ticket_status);
 
 		// Handle pagination
 		$start = $pagination->validate_start($start, $this->config['tickets_per_page'], $total_tickets);
-
-		$base_url = $this->helper->route('kinerity_trackers_controller', array('page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket_status' => (int) $ticket_status));
+		$base_url = $this->helper->route('kinerity_trackers_controller', ['page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket_status' => (int) $ticket_status]);
 		$pagination->generate_template_pagination($base_url, 'pagination', 'start', $total_tickets, $this->config['tickets_per_page'], $start);
 
-		$this->container->get('kinerity.trackers.functions.tracker')->get_tickets($sql, $start, $status_new);
+		$this->container->get('kinerity.trackers.functions')->get_tickets($tracker, $project_id, $ticket_status, $start, $status_new);
 
 		switch ($ticket_status)
 		{
@@ -113,12 +113,12 @@ class viewproject
 			break;
 
 			default:
-				$status = $this->container->get('kinerity.trackers.functions.tracker')->get_status_data($ticket_status);
+				$status = $this->container->get('kinerity.trackers.functions')->get_status_data($ticket_status);
 				$status_name = $status['status_name'];
 			break;
 		}
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'TRACKER_NAME'	=> $tracker['tracker_name'],
 
 			'STATUS_ID'	=> $ticket_status,
@@ -126,25 +126,25 @@ class viewproject
 
 			'TOTAL_TICKETS'	=> $this->language->lang('TOTAL_TICKETS', $total_tickets),
 
-			'U_ACTION'			=> $this->helper->route('kinerity_trackers_controller', array('page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id)),
-			'U_POST_NEW_TICKET'	=> $this->helper->route('kinerity_trackers_controller', array('page' => 'posting', 'mode' => 'post', 't' => (int) $tracker_id, 'p' => (int) $project_id)),
+			'U_ACTION'			=> $this->helper->route('kinerity_trackers_controller', ['page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id]),
+			'U_POST_NEW_TICKET'	=> $this->helper->route('kinerity_trackers_controller', ['page' => 'posting', 'mode' => 'post', 't' => (int) $tracker_id, 'p' => (int) $project_id]),
 
 			'S_HIDDEN_FIELDS'	=> $s_hidden_fields,
-		));
+		]);
 
-		$navlinks = array(
-			array(
+		$navlinks = [
+			[
 				'FORUM_NAME'	=> $tracker['tracker_name'],
-				'U_VIEW_FORUM'	=> $this->helper->route('kinerity_trackers_controller', array('page' => 'viewtracker', 't' => (int) $tracker_id)),
-			),
+				'U_VIEW_FORUM'	=> $this->helper->route('kinerity_trackers_controller', ['page' => 'viewtracker', 't' => (int) $tracker_id]),
+			],
 
-			array(
+			[
 				'FORUM_NAME'	=> $project['project_name'],
-				'U_VIEW_FORUM'	=> $this->helper->route('kinerity_trackers_controller', array('page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id)),
-			),
-		);
+				'U_VIEW_FORUM'	=> $this->helper->route('kinerity_trackers_controller', ['page' => 'viewproject', 't' => (int) $tracker_id, 'p' => (int) $project_id]),
+			],
+		];
 
-		$this->container->get('kinerity.trackers.functions.tracker')->generate_navlinks($navlinks);
+		$this->container->get('kinerity.trackers.functions')->generate_navlinks($navlinks);
 
 		return $this->helper->render('viewproject_body.html', $tracker['tracker_name']);
 	}

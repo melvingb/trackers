@@ -3,7 +3,7 @@
  *
  * Trackers extension for the phpBB Forum Software package
  *
- * @copyright (c) 2019, kinerity, https://www.layer-3.org/
+ * @copyright (c) 2020, kinerity, https://www.layer-3.org/
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -11,7 +11,7 @@
 namespace kinerity\trackers;
 
 /**
- * Trackers constants info
+ * Trackers constants
  */
 class constants
 {
