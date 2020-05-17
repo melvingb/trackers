@@ -3,7 +3,7 @@
  *
  * Trackers extension for the phpBB Forum Software package
  *
- * @copyright (c) 2019, kinerity, https://www.layer-3.org/
+ * @copyright (c) 2020, kinerity, https://www.layer-3.org/
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -17,17 +17,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class main_controller
 {
-	/* @var ContainerInterface */
+	/** @var ContainerInterface */
 	protected $container;
 
-	/* @var \phpbb\language\language */
+	/** @var \phpbb\language\language */
 	protected $language;
 
 	/**
 	 * Constructor
 	 *
-	 * @param ContainerInterface                 $container
-	 * @param \phpbb\language\language           $language
+	 * @param ContainerInterface        $container
+	 * @param \phpbb\language\language  $language
 	 */
 	public function __construct(ContainerInterface $container, \phpbb\language\language $language)
 	{
@@ -52,6 +52,14 @@ class main_controller
 
 			case 'viewticket':
 				return $this->container->get('kinerity.trackers.viewticket')->display();
+			break;
+/*
+			case 'posting':
+				return $this->container->get('kinerity.trackers.posting')->display();
+			break;
+*/
+			case 'statistics':
+				return $this->container->get('kinerity.trackers.statistics')->display();
 			break;
 
 			default:

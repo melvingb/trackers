@@ -3,14 +3,14 @@
  *
  * Trackers extension for the phpBB Forum Software package
  *
- * @copyright (c) 2019, kinerity, https://www.layer-3.org/
+ * @copyright (c) 2020, kinerity, https://www.layer-3.org/
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
 /**
-* DO NOT CHANGE
-*/
+ * DO NOT CHANGE
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -37,23 +37,14 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'ACL_CAT_TRACKERS'	=> 'Trackers',
 
-	'ACL_U_TRACKERS_ATTACH'	=> 'Can attach files',
-	'ACL_U_TRACKERS_POST'	=> 'Can post new tickets',
-	'ACL_U_TRACKERS_REPLY'	=> 'Can reply to tickets',
-	'ACL_U_TRACKERS_EDIT'	=> 'Can edit own tickets/posts',
-	'ACL_U_TRACKERS_DELETE'	=> 'Can delete own tickets/posts',
+	'ACL_U_TRACKER_POST'	=> 'Can create new tickets',
+	'ACL_U_TRACKER_EDIT'	=> 'Can edit own tickets',
+	'ACL_U_TRACKER_DELETE'	=> 'Can delete own tickets',
+	'ACL_U_TRACKER_REPLY'	=> 'Can reply to tickets',
 
-	'ACL_M_TRACKERS_EDIT'			=> 'Can edit tickets/posts<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_DELETE'			=> 'Can delete tickets/posts<br /><em>This setting requires team access to the individual project.',
-	'ACL_M_TRACKERS_LOCK'			=> 'Can lock tickets<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_MOVE'			=> 'Can move tickets<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_ASSIGN'			=> 'Can assign tickets<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_CHGSTATUS'		=> 'Can change ticket status<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_CHGPRIORITY'	=> 'Can change ticket priority<br /><em>This setting requires team access to the individual project.</em>',
-	'ACL_M_TRACKERS_CHGSEVERITY'	=> 'Can change ticket severity<br /><em>This setting requires team access to the individual project.</em>',
-
-	'ACL_A_TRACKERS_MANAGE'	=> 'Can manage trackers',
-));
+	'ACL_M_TRACKER_EDIT'	=> 'Can edit tickets',
+	'ACL_M_TRACKER_DELETE'	=> 'Can delete tickets',
+]);
